@@ -1,0 +1,25 @@
+exclude: null
+grid-search:
+
+  "--config":
+    - "ippo_egg"
+
+  lr:
+    - 0.003
+    - 0.0003
+    - 0.005
+    - 0.0005
+
+  standardise_rewards:
+    - True
+
+  use_rnn:
+    - True
+
+  entropy_coef:
+    - 0.04
+    
+grid-search-groups:
+  env0:
+    - "--env-config": "egg_tiny"
+    - env_args.key: MultiAgentEthicalGathering-tiny-v1

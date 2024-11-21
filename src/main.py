@@ -1,3 +1,4 @@
+import EthicalGatheringGame
 try:
     # until python 3.10
     from collections import Mapping

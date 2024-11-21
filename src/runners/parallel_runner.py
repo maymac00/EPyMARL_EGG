@@ -87,7 +87,7 @@ class ParallelRunner:
             parent_conn.send(("close", None))
 
     def reset(self):
-        self.batch = self.new_batch()
+        self.batch = self.new_batch() # Buffer
 
         # Reset the envs
         for parent_conn in self.parent_conns:
@@ -96,7 +96,7 @@ class ParallelRunner:
         pre_transition_data = {"state": [], "avail_actions": [], "obs": []}
         # Get the obs, state and avail_actions back
         for parent_conn in self.parent_conns:
-            data = parent_conn.recv()
+            data = parent_conn.recv() # This method blocks until data is received
             pre_transition_data["state"].append(data["state"])
             pre_transition_data["avail_actions"].append(data["avail_actions"])
             pre_transition_data["obs"].append(data["obs"])
@@ -226,12 +226,12 @@ class ParallelRunner:
         cur_returns = self.test_returns if test_mode else self.train_returns
         log_prefix = "test_" if test_mode else ""
         infos = [cur_stats] + final_env_infos
-        cur_stats.update(
+        """cur_stats.update(
             {
                 k: sum(d.get(k, 0) for d in infos)
                 for k in set.union(*[set(d) for d in infos])
             }
-        )
+        )"""
         cur_stats["n_episodes"] = self.batch_size + cur_stats.get("n_episodes", 0)
         cur_stats["ep_length"] = sum(episode_lengths) + cur_stats.get("ep_length", 0)
 
