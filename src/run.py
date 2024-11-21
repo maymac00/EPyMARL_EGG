@@ -43,8 +43,10 @@ def run(_run, _config, _log):
         map_name = _config["env_args"]["map_name"]
     except:
         map_name = _config["env_args"]["key"]
+    timestamp = datetime.datetime.now()
     unique_token = (
-        f"{_config['name']}_seed{_config['seed']}_{map_name}_{datetime.datetime.now()}"
+        #f"{_config['name']}_seed{_config['seed']}_{map_name}_{datetime.datetime.now()}"
+        f"{_config['name']}_seed{_config['seed']}_{map_name}_{timestamp.strftime('%m_%d_%H_%M')}_{timestamp.microsecond}"
     )
 
     args.unique_token = unique_token
@@ -201,6 +203,7 @@ def run_sequential(args, logger):
         buffer.insert_episode_batch(episode_batch)
 
         if buffer.can_sample(args.batch_size):
+            # Enough experience to update
             episode_sample = buffer.sample(args.batch_size)
 
             # Truncate batch to only filled timesteps
@@ -209,7 +212,7 @@ def run_sequential(args, logger):
 
             if episode_sample.device != args.device:
                 episode_sample.to(args.device)
-
+            # Learner updates based on the batch of episodes
             learner.train(episode_sample, runner.t_env, episode)
 
         # Execute test runs once in a while
