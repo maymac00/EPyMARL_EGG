@@ -120,7 +120,10 @@ def run_sequential(args, logger):
         "terminated": {"vshape": (1,), "dtype": th.uint8},
     }
     # For individual rewards in gymmai reward is of shape (1, n_agents)
-    if args.common_reward:
+    if args.n_objectives > 1:
+      scheme["reward"] = {"vshape": (args.n_agents,args.n_objectives)}
+    # TODO: make common reward compatible with multi-objective
+    elif args.common_reward:
         scheme["reward"] = {"vshape": (1,)}
     else:
         scheme["reward"] = {"vshape": (args.n_agents,)}

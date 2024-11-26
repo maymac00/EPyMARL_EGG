@@ -3,6 +3,7 @@ import sys
 
 from .multiagentenv import MultiAgentEnv
 from .gymma import GymmaWrapper
+from .gymmoma import GymmomaWrapper
 from .smaclite_wrapper import SMACliteWrapper
 
 
@@ -32,10 +33,16 @@ def gymma_fn(**kwargs) -> MultiAgentEnv:
     assert "common_reward" in kwargs and "reward_scalarisation" in kwargs
     return GymmaWrapper(**kwargs)
 
+def gymmoma_fn(**kwargs) -> MultiAgentEnv:
+    # TODO: we should assert that n_objectives exists elsewhere as this only has the args of the env, i.e. MAEGG
+    # assert "n_objectives" in kwargs
+    return GymmomaWrapper(**kwargs)
+
 
 REGISTRY = {}
 REGISTRY["smaclite"] = smaclite_fn
 REGISTRY["gymma"] = gymma_fn
+REGISTRY["gymmoma"] = gymmoma_fn
 
 
 # registering both smac and smacv2 causes a pysc2 error

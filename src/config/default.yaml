@@ -18,6 +18,9 @@ t_max: 30000 # Stop running after this many timesteps
 use_cuda: True # Use gpu by default unless it isn't available
 buffer_cpu_only: True # If true we won't keep all of the replay buffer in vram
 
+# --- pymomarl options ---
+n_objectives: 1 # Number of objectives
+
 # --- Logging options ---
 use_tensorboard: False # Log results to tensorboard
 use_wandb: False # Log results to W&B

@@ -110,7 +110,10 @@ class ParallelRunner:
         self.reset()
 
         all_terminated = False
-        if self.args.common_reward:
+        # TODO: This is a bit of a hack to set the returns to mo. Common reward is not supported for mo
+        if self.args.n_objectives > 1:
+            episode_returns = [np.zeros((self.args.n_agents, self.args.n_objectives)) for _ in range(self.batch_size)]
+        elif self.args.common_reward:
             episode_returns = [0 for _ in range(self.batch_size)]
         else:
             episode_returns = [
