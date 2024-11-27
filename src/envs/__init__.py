@@ -4,7 +4,7 @@ import sys
 from .multiagentenv import MultiAgentEnv
 from .gymma import GymmaWrapper
 from .gymmoma import GymmomaWrapper
-from .smaclite_wrapper import SMACliteWrapper
+#from .smaclite_wrapper import SMACliteWrapper
 
 
 if sys.platform == "linux":

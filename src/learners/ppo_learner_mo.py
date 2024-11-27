@@ -88,6 +88,16 @@ class PPOLearnerMo:
         old_pi_taken = th.gather(old_pi, dim=3, index=actions).squeeze(3)
         old_log_pi_taken = th.log(old_pi_taken + 1e-10)
 
+        # Lexico update
+        first_order_weights = th.zeros((self.n_agents, self.n_objectives)).to(old_pi.device)
+        for ag in range(self.n_agents):
+            for obj in range(self.n_objectives - 1):
+                w = self.beta[ag, obj] + self.mu[ag, obj] * sum(
+                    [self.beta[ag, j] for j in range(obj + 1, self.n_objectives)])
+                first_order_weights[ag, obj] = w
+            first_order_weights[ag, -1] = th.tensor(self.beta[ag, self.n_objectives - 1],
+                                                    dtype=first_order_weights.dtype)
+
         for k in range(self.args.epochs):
             mac_out = []
             self.mac.init_hidden(batch.batch_size)
@@ -101,20 +111,13 @@ class PPOLearnerMo:
                 self.critic, self.target_critic, batch, rewards, critic_mask
             )
             advantages = advantages.detach()
+
             # Calculate policy grad with mask
 
             pi[mask == 0] = 1.0
 
             pi_taken = th.gather(pi, dim=3, index=actions).squeeze(3)
             log_pi_taken = th.log(pi_taken + 1e-10)
-
-            # Lexico update
-            first_order_weights = th.zeros((self.n_agents, self.n_objectives)).to(advantages.device)
-            for ag in range(self.n_agents):
-                for obj in range(self.n_objectives-1):
-                    w = self.beta[ag, obj] + self.mu[ag, obj] * sum([self.beta[ag, j] for j in range(obj+1, self.n_objectives)])
-                    first_order_weights[ag, obj] = w
-                first_order_weights[ag,-1] = th.tensor(self.beta[ag, self.n_objectives - 1], dtype=first_order_weights.dtype)
 
             entropy = -th.sum(pi * th.log(pi + 1e-10), dim=-1)
 
@@ -129,12 +132,7 @@ class PPOLearnerMo:
                     * first_order_weighted_advantages
             ) # actor clipped loss
 
-            pg_loss = (
-                    -(
-                            (th.min(surr1, surr2) + self.args.entropy_coef * entropy) * mask
-                    ).sum()
-                    / mask.sum()
-            ) # final actor loss
+            pg_loss = (-((th.min(surr1, surr2) + self.args.entropy_coef * entropy) * mask).sum()/ mask.sum()) # final actor loss
 
             # Keep track of the losses independently for each agent and objective
             for obj in range(self.n_objectives):
@@ -169,6 +167,14 @@ class PPOLearnerMo:
         elif self.args.target_update_interval_or_tau <= 1.0:
             self._update_targets_soft(self.args.target_update_interval_or_tau)
 
+        # Update Lagrange multipliers
+        for i in range(self.n_objectives-1):
+            for ag in range(self.n_agents):
+                self.j[ag, i] = (-th.tensor(self.recent_losses[ag][i])).mean()
+                self.mu[ag,i] += self.eta[ag, i] * (self.j[ag, i] - (-self.recent_losses[ag][i][-1]))
+                self.mu[ag,i] = max(0, self.mu[ag,i])
+
+
         if t_env - self.log_stats_t >= self.args.learner_log_interval:
             ts_logged = len(critic_train_stats["critic_loss"])
             for key in [
@@ -181,10 +187,16 @@ class PPOLearnerMo:
                 self.logger.log_stat(
                     key, sum(critic_train_stats[key]) / ts_logged, t_env
                 )
+            self.logger.log_stat("entropy", entropy.mean().item(), t_env)
+            # Log lexico parameters for each agent
+            for ag in range(self.n_agents):
+                for obj in range(self.n_objectives-1):
+                    self.logger.log_stat(f"Agent_{ag}/lagr_multiplier_{obj}", self.mu[ag, obj], t_env)
+                    self.logger.log_stat(f"Agent_{ag}/mean_recent_loss_{obj}", self.j[ag, obj], t_env)
 
             self.logger.log_stat(
                 "advantage_mean",
-                (advantages * mask).sum().item() / mask.sum().item(),
+                (advantages * mo_mask).sum().item() / mo_mask.sum().item(),
                 t_env,
             )
             self.logger.log_stat("pg_loss", pg_loss.item(), t_env)
