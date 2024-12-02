@@ -17,7 +17,7 @@ batch_size: 10
 target_update_interval_or_tau: 2500
 
 lr: 0.0003
-hidden_dim: 128 # Size of hidden state for default rnn agent
+hidden_dim: 256 # Size of hidden state for default rnn agent
 
 obs_agent_id: False
 obs_last_action: False

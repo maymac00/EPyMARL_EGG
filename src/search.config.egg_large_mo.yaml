@@ -2,7 +2,7 @@ exclude: null
 grid-search:
 
   "--config":
-    - "ippo_egg"
+    - "ippo_egg_mo"
 
   lr:
     - 0.003
@@ -14,12 +14,11 @@ grid-search:
     - True
 
   use_rnn:
-    - True
+    - False
 
   entropy_coef:
     - 0.12
 
 grid-search-groups:
   env0:
-    - "--env-config": "egg_large"
-    - env_args.key: MultiAgentEthicalGathering-large-v1
+    - "--env-config": "egg_large_mo"

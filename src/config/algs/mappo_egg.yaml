@@ -1,4 +1,4 @@
-# --- IPPO NS specific parameters ---
+# --- MAPPO specific parameters ---
 
 action_selector: "soft_policies"
 mask_before_softmax: True
@@ -13,24 +13,22 @@ batch_size: 5
 target_update_interval_or_tau: 2500
 
 lr: 0.0003
-hidden_dim: 256 # Size of hidden state for default rnn agent
+agent: "rnn_egg"
 
 obs_agent_id: False
 obs_last_action: False
 obs_individual_obs: False
 
-mac: "non_shared_mac"
-agent: "rnn_egg_ns"
 agent_output_type: "pi_logits"
 learner: "ppo_learner"
-entropy_coef: 0.04
+entropy_coef: 0.001
+use_rnn: False
 standardise_returns: False
 standardise_rewards: True
-use_rnn: False
-epochs: 10
-eps_clip: 0.2
 q_nstep: 5 # 1 corresponds to normal r + gammaV
-critic_type: "ac_critic_ns"
-name: "ippo_egg"
-use_tensorboard: True
+critic_type: "cv_critic"
+epochs: 4
+eps_clip: 0.2
+name: "mappo"
 
+t_max: 40050000
