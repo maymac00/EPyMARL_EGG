@@ -28,15 +28,17 @@ if __name__ == "__main__":
     args = SimpleNamespace(**config)
     logger = Logger(get_logger())
 
+    # TODO:parametrise this
+    args.env_args["efficiency"] = 0.6
     args.evaluate = True
-    args.render = False
+    args.render = True
     args.use_cuda = False
     # Get current directory
     args.checkpoint_path = os.path.join(os.path.dirname(os.getcwd()), test_args.model)
     args.env_args["seed"] = random.randint(0, 1000000)
     args.batch_size_run = 1
     args.device = "cpu"
-    args.test_nepisode = 20
+    args.test_nepisode = 1
     args.runner = "episode"
 
     run_sequential(args, logger)
