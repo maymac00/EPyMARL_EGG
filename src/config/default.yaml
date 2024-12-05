@@ -35,7 +35,7 @@ evaluate: False # Evaluate model for test_nepisode episodes and quit (no trainin
 render: False # Render the environment when evaluating (only when evaluate == True)
 load_step: 0 # Load model trained on this many timesteps (0 if choose max possible)
 save_replay: False # Saving the replay of the model loaded from checkpoint_path
-local_results_path: "~/EPyMARL_EGG/epymarl/results" # Path for local results
+local_results_path: "beegfs/EPyMARL/" # Path for local results
 
 # --- RL hyperparameters ---
 gamma: 0.99

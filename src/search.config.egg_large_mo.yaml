@@ -10,14 +10,11 @@ grid-search:
     - 0.005
     - 0.0005
 
-  standardise_rewards:
-    - True
-
-  use_rnn:
-    - False
-
   entropy_coef:
     - 0.12
+    - 0.08
+
+  name: reference_policy_eff40
 
 grid-search-groups:
   env0:

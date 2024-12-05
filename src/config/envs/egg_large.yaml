@@ -4,14 +4,15 @@ env_args:
   key: "MultiAgentEthicalGathering-large-v1"
   time_limit: 500
   pretrained_wrapper: null
+  we: 2.6
 
 test_greedy: False
-test_nepisode: 100
-test_interval: 50000
-log_interval: 50000
-runner_log_interval: 10000
-learner_log_interval: 10000
-t_max: 25000000
+test_nepisode: 500
+test_interval: 10000000
+log_interval: 5000000
+runner_log_interval: 50000
+learner_log_interval: 50000
+t_max: 50000000
 common_reward: False
-save_model: False # Save the models to disk
-save_model_interval: 50000 # Save models after this many timesteps
+save_model: True # Save the models to disk
+save_model_interval: 10000000 # Save models after this many timesteps

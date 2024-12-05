@@ -3,34 +3,36 @@
 action_selector: "soft_policies"
 mask_before_softmax: True
 
-runner: "parallel"
-
+# Variables
 buffer_size: 5
 batch_size_run: 5
 batch_size: 5
 
-# update the target network every {} training steps
-target_update_interval_or_tau: 2500
-
-lr: 0.0003
+lr: 0.003
 hidden_dim: 256 # Size of hidden state for default rnn agent
+entropy_coef: 0.12
+epochs: 10
+gamma: 0.8
+t_max: 50000000
+name: "ippo_egg" # Name for the experiment. Used for sacred
+
+# Model specification
+mac: "non_shared_mac"
+agent: "rnn_egg_ns"
+critic_type: "ac_critic_ns"
+learner: "ppo_learner"
+runner: "parallel"
+use_rnn: False
+
 
 obs_agent_id: False
 obs_last_action: False
 obs_individual_obs: False
-
-mac: "non_shared_mac"
-agent: "rnn_egg_ns"
 agent_output_type: "pi_logits"
-learner: "ppo_learner"
-entropy_coef: 0.04
 standardise_returns: False
 standardise_rewards: True
-use_rnn: False
-epochs: 10
 eps_clip: 0.2
 q_nstep: 5 # 1 corresponds to normal r + gammaV
-critic_type: "ac_critic_ns"
-name: "ippo_egg"
 use_tensorboard: True
-
+# update the target network every {} training steps
+target_update_interval_or_tau: 2500
