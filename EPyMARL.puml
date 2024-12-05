@@ -1,0 +1,74 @@
+@startuml
+abstract class Controller
+class BasicController
+class non_shared_controller
+
+abstract class Runner
+class EpisodeRunner
+class ParallelRunner
+
+abstract class MultiAgentEnv
+class GymmaWrapper
+class GymmomaWrapper
+
+abstract class Agent
+class RNNAgent
+class RNNEGGAgent
+
+class RunFunc{
+ + run()
+}
+
+Agent : Agent[] self.agents
+Agent  --* "1 to n" Agent
+
+abstract class Learner
+class PPOLearner
+class PPOLearner_mo
+
+class Buffer
+
+MultiAgentEnv -up-|> GymmaWrapper
+MultiAgentEnv -up-|> GymmomaWrapper
+
+Runner -up-|> EpisodeRunner
+Runner -up-|> ParallelRunner
+
+Controller -up-|> non_shared_controller
+Controller -up-|> BasicController
+
+Agent --|> RNNAgent
+RNNAgent --|> RNNEGGAgent
+
+Learner -up-|> PPOLearner
+PPOLearner -up-|> PPOLearner_mo
+
+
+
+Controller --* Agent
+
+Runner -right-* MultiAgentEnv
+
+RunFunc -up-* Runner
+RunFunc -left-* Controller
+RunFunc -up-* Learner
+RunFunc -up-* Buffer
+
+note bottom of RunFunc
+    This is actually not a class, but a function that runs the training loop.
+
+    mac = Controller()
+    runner = Runner()
+    learner = Learner()
+    buffer = Buffer()
+
+    loop{
+        batch = runner.run()
+        buffer.insert(batch)
+
+        learner.train(buffer.sample())
+        // Log metrics
+    }
+end note
+
+@enduml
