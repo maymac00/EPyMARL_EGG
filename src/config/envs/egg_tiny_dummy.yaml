@@ -1,0 +1,21 @@
+env: "gymma" # its not an id, its the kind of environment
+
+env_args:
+  key: "MultiAgentEthicalGathering-tiny-v1"
+  time_limit: 20
+  pretrained_wrapper: null
+  we: [1,10]
+
+test_greedy: False
+test_nepisode: 10
+test_interval: 500
+log_interval: 500
+runner_log_interval: 500
+learner_log_interval: 500
+t_max: 5000
+common_reward: False
+save_model: False # Save the models to disk
+save_model_interval: 100000 # Save models after this many timesteps
+save_replay: False # Saving the replay of the model loaded from checkpoint_path
+gamma: 0.8
+batch_size: 5 # Number of episodes to train on

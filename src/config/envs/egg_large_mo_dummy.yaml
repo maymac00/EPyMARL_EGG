@@ -2,16 +2,16 @@ env: "gymmoma"
 
 env_args:
   key: "MultiAgentEthicalGathering-large-mo-v1"
-  time_limit: 500
+  time_limit: 50
   pretrained_wrapper: null
 
 test_greedy: False
-test_nepisode: 300
-test_interval: 5000000
+test_nepisode: 10
+test_interval: 10000
 log_interval: 5000000
-runner_log_interval: 2000000
-learner_log_interval: 2000000
-t_max: 25000000
+runner_log_interval: 2500
+learner_log_interval: 2500
+t_max: 50000
 common_reward: False
-save_model: True # Save the models to disk
+save_model: False # Save the models to disk
 save_model_interval: 15000000 # Save models after this many timesteps

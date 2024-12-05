@@ -259,7 +259,7 @@ class ParallelRunner:
         if self.args.common_reward:
             self.logger.log_stat(prefix + "return_mean", np.mean(returns), self.t_env)
             self.logger.log_stat(prefix + "return_std", np.std(returns), self.t_env)
-        else:
+        elif self.args.n_objectives < 2:
             for i in range(self.args.n_agents):
                 self.logger.log_stat(
                     prefix + f"agent_{i}_return_mean",
@@ -278,6 +278,27 @@ class ParallelRunner:
             self.logger.log_stat(
                 prefix + "total_return_std", total_returns.std(), self.t_env
             )
+        else:
+            value_vectors = np.array(returns).mean(axis=0)
+            value_vectors_std = np.array(returns).std(axis=0)
+            for j in range(self.args.n_objectives):
+                self.logger.log_stat(
+                    prefix + f"total_objective_{j}_return_mean",
+                    value_vectors.mean(axis=0)[j],
+                    self.t_env,
+                )
+                for i in range(self.args.n_agents):
+                    self.logger.log_stat(
+                        prefix + f"agent_{i}_objective_{j}_return_mean",
+                        value_vectors[i, j],
+                        self.t_env,
+                    )
+                    self.logger.log_stat(
+                        prefix + f"agent_{i}_objective_{j}_return_std",
+                        value_vectors_std[i, j],
+                        self.t_env,
+                    )
+
         returns.clear()
 
         for k, v in stats.items():
