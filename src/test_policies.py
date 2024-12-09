@@ -17,7 +17,7 @@ if __name__ == "__main__":
     #parser.add_argument("--model_path", type=str)
     parser.add_argument("--config", type=str, default="mappo_egg")
     parser.add_argument("--env-config", type=str, default="egg_large")
-    parser.add_argument("--model", type=str, default="beegfs/EPyMARL/models/mappo_seed2_MultiAgentEthicalGathering-large-v1_12_04_00_28_135987")
+    parser.add_argument("--model", type=str, default="beegfs/EPyMARL/models/validation_run_we3_eff40_seed4_MultiAgentEthicalGathering-large-v1_12_05_19_14_915383")
     test_args = parser.parse_args()
 
     # load env config as a name space
