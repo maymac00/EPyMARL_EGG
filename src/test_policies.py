@@ -10,7 +10,11 @@ import yaml
 from types import SimpleNamespace
 
 from main import recursive_dict_update
-from run import run_sequential
+from controllers import REGISTRY as mac_REGISTRY
+from runners import REGISTRY as r_REGISTRY
+from components.transforms import OneHot
+import torch as th
+from run import evaluate_sequential, run_sequential
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -31,18 +35,25 @@ if __name__ == "__main__":
     # TODO:parametrise this
     args.env_args["efficiency"] = 0.6
     args.evaluate = True
-    args.render = True
+    args.render = False
     args.use_cuda = False
     # Get current directory
     args.checkpoint_path = os.path.join(os.path.dirname(os.getcwd()), test_args.model)
+    #last_ckpt = max([int(d) for d in os.listdir(args.checkpoint_path) if os.path.isdir(os.path.join(args.checkpoint_path, d))])
+    #args.checkpoint_path = os.path.join(args.checkpoint_path, str(last_ckpt))
+
     args.env_args["seed"] = random.randint(0, 1000000)
     args.batch_size_run = 1
     args.device = "cpu"
-    args.test_nepisode = 1
+    args.test_nepisode = 4
     args.runner = "episode"
 
-    run_sequential(args, logger)
 
+    runner, mac, learner = run_sequential(args, logger)
 
+    env = runner.env._env.unwrapped
+    print(env.agents[0].acc_r_vec)
+    env.print_results()
+    env.plot_results("median", save_path=args.checkpoint_path+"/results.png")
 
 

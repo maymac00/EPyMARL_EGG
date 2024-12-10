@@ -182,12 +182,17 @@ def run_sequential(args, logger):
         runner.t_env = timestep_to_load
 
         if args.evaluate or args.save_replay:
+            # Very ugly
+            if "MultiAgentEthicalGathering" in args.env_args["key"]:
+                runner.env._env.unwrapped.toggleTrack(True)
+                runner.env._env.unwrapped.toggleStash(True)
+            
             runner.log_train_stats_t = runner.t_env
             evaluate_sequential(args, runner)
             logger.log_stat("episode", runner.t_env, runner.t_env)
             logger.print_recent_stats()
             logger.console_logger.info("Finished Evaluation")
-            return
+            return runner, mac, learner
 
     # start training
     episode = 0
@@ -271,6 +276,7 @@ def run_sequential(args, logger):
 
     runner.close_env()
     logger.console_logger.info("Finished Training")
+    return runner, mac, learner
 
 
 def args_sanity_check(config, _log):
