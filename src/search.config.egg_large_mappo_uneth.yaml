@@ -1,0 +1,23 @@
+exclude: null
+grid-search:
+
+  "--config":
+    - "mappo_egg"
+
+  lr:
+    - 0.003
+    - 0.0003
+    - 0.005
+    - 0.0005
+
+  entropy_coef:
+    - 0.12
+    - 0.08
+
+  name: validation_run_we3_eff40
+
+grid-search-groups:
+  env0:
+    - "--env-config": "egg_large"
+    - env_args.key: MultiAgentEthicalGathering-large-v1
+    - env_args.we: 0

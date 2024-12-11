@@ -298,7 +298,9 @@ class ParallelRunner:
                         value_vectors_std[i, j],
                         self.t_env,
                     )
-
+            # Print value vector ready to copy as np.array
+            print(
+                f"np.array({np.array2string(value_vectors, separator=', ', precision=2, threshold=np.inf)})\n")
         returns.clear()
 
         for k, v in stats.items():

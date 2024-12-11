@@ -1,3 +1,4 @@
+from .ac_mo import ACCriticMO
 from .coma import COMACritic
 from .centralV import CentralVCritic
 from .coma_ns import COMACriticNS
@@ -18,6 +19,7 @@ REGISTRY["cv_critic_ns"] = CentralVCriticNS
 REGISTRY["maddpg_critic"] = MADDPGCritic
 REGISTRY["maddpg_critic_ns"] = MADDPGCriticNS
 REGISTRY["ac_critic"] = ACCritic
+REGISTRY["ac_critic_mo"] = ACCriticMO
 REGISTRY["ac_critic_ns"] = ACCriticNS
 REGISTRY["ac_critic_ns_mo"] = ACCriticNSMo
 

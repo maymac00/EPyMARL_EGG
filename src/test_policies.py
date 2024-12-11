@@ -15,13 +15,14 @@ from runners import REGISTRY as r_REGISTRY
 from components.transforms import OneHot
 import torch as th
 from run import evaluate_sequential, run_sequential
+import logging
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     #parser.add_argument("--model_path", type=str)
-    parser.add_argument("--config", type=str, default="mappo_egg")
-    parser.add_argument("--env-config", type=str, default="egg_large")
-    parser.add_argument("--model", type=str, default="beegfs/EPyMARL/models/validation_run_we3_eff40_seed4_MultiAgentEthicalGathering-large-v1_12_05_19_14_915383")
+    parser.add_argument("--config", type=str, default="ippo_egg_mo_ns")
+    parser.add_argument("--env-config", type=str, default="egg_large_mo")
+    parser.add_argument("--model", type=str, default="beegfs/EPyMARL/models/reference_policy_eff40_seed4_MultiAgentEthicalGathering-large-mo-v1_12_05_20_30_371714")
     test_args = parser.parse_args()
 
     # load env config as a name space
@@ -31,6 +32,8 @@ if __name__ == "__main__":
 
     args = SimpleNamespace(**config)
     logger = Logger(get_logger())
+    logging.getLogger('matplotlib').setLevel(logging.WARNING)
+    logging.getLogger('PIL').setLevel(logging.WARNING)
 
     # TODO:parametrise this
     args.env_args["efficiency"] = 0.6
@@ -45,9 +48,8 @@ if __name__ == "__main__":
     args.env_args["seed"] = random.randint(0, 1000000)
     args.batch_size_run = 1
     args.device = "cpu"
-    args.test_nepisode = 4
+    args.test_nepisode = 500
     args.runner = "episode"
-
 
     runner, mac, learner = run_sequential(args, logger)
 
