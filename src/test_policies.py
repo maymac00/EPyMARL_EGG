@@ -20,9 +20,9 @@ import logging
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     #parser.add_argument("--model_path", type=str)
-    parser.add_argument("--config", type=str, default="ippo_egg_mo_ns")
+    parser.add_argument("--config", type=str, default="ippo_egg_mo")
     parser.add_argument("--env-config", type=str, default="egg_large_mo")
-    parser.add_argument("--model", type=str, default="beegfs/EPyMARL/models/reference_policy_eff40_seed4_MultiAgentEthicalGathering-large-mo-v1_12_05_20_30_371714")
+    parser.add_argument("--model", type=str, default="beegfs/EPyMARL/models/reference_policy_eff40_seed4_MultiAgentEthicalGathering-large-mo-v1_12_11_21_15_307956")
     test_args = parser.parse_args()
 
     # load env config as a name space
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     logging.getLogger('PIL').setLevel(logging.WARNING)
 
     # TODO:parametrise this
-    args.env_args["efficiency"] = 0.6
+    args.env_args["efficiency"] = 0.4
     args.evaluate = True
     args.render = False
     args.use_cuda = False
@@ -54,7 +54,6 @@ if __name__ == "__main__":
     runner, mac, learner = run_sequential(args, logger)
 
     env = runner.env._env.unwrapped
-    print(env.agents[0].acc_r_vec)
     env.print_results()
     env.plot_results("median", save_path=args.checkpoint_path+"/results.png")
 
