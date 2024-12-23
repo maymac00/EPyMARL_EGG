@@ -6,13 +6,13 @@ grid-search:
 
   lr:
     - 0.003
-    - 0.0003
     - 0.005
-    - 0.0005
+    - 0.007
+    - 0.001
 
   entropy_coef:
+    - 0.14
     - 0.12
-    - 0.08
 
   name: validation_run_we0_eff40
 
@@ -21,3 +21,4 @@ grid-search-groups:
     - "--env-config": "egg_large"
     - env_args.key: MultiAgentEthicalGathering-large-v1
     - env_args.we: 0
+    - t_max: 30000000

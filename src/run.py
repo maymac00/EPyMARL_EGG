@@ -50,6 +50,7 @@ def run(_run, _config, _log):
     )
 
     args.unique_token = unique_token
+    args.name = _config['name']
     if args.use_tensorboard:
         tb_logs_direc = os.path.join(
             dirname(dirname(abspath(__file__))), "results", "tb_logs"
@@ -247,7 +248,8 @@ def run_sequential(args, logger):
         ):
             model_save_time = runner.t_env
             save_path = os.path.join(
-                args.local_results_path, "models", args.unique_token, str(runner.t_env)
+                #args.local_results_path, "models", args.unique_token, str(runner.t_env)
+                args.local_results_path, f"models/{args.name}", args.unique_token, str(runner.t_env)
             )
             # "results/models/{}".format(unique_token)
             os.makedirs(save_path, exist_ok=True)

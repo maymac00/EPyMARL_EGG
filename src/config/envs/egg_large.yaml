@@ -5,6 +5,7 @@ env_args:
   time_limit: 500
   pretrained_wrapper: null
   we: 2.6
+  efficiency: 0.4
 
 test_greedy: False
 test_nepisode: 500

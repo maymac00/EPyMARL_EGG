@@ -1,0 +1,22 @@
+exclude: null
+grid-search:
+
+  "--config":
+    - "ippo_egg_mo"
+
+  lr:
+    - 0.003
+    - 0.0003
+    - 0.005
+    - 0.0005
+
+  entropy_coef:
+    - 0.12
+    - 0.08
+
+  name: reference_policy_eff80
+
+grid-search-groups:
+  env0:
+    - "--env-config": "egg_large_mo"
+    - env_args.efficiency: 0.8

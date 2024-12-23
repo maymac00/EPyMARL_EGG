@@ -4,6 +4,7 @@ env_args:
   key: "MultiAgentEthicalGathering-large-mo-v1"
   time_limit: 500
   pretrained_wrapper: null
+  efficiency: 0.4
 
 n_objectives: 2
 
